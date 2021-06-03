@@ -1,12 +1,21 @@
 const socket = io()
 
+// elements
 const form = document.getElementById('chat-form')
 const messageInput = form.querySelector('input')
 const messageButton = form.querySelector('button')
 const locationButton = document.getElementById('share-location')
+const messages = document.getElementById('messages')
+
+// templates
+const messageTemplate = document.getElementById('message-template').innerHTML
 
 socket.on('message', message => {
     console.log(message)
+    const html = Mustache.render(messageTemplate, {
+        message
+    })
+    messages.insertAdjacentHTML('beforeend', html)
 })
 
 form.addEventListener('submit', e => {
