@@ -6,10 +6,12 @@ const messageInput = form.querySelector('input')
 const messageButton = form.querySelector('button')
 const locationButton = document.getElementById('share-location')
 const messages = document.getElementById('messages')
+const sidebar = document.getElementById('sidebar')
 
 // templates
 const messageTemplate = document.getElementById('message-template').innerHTML
 const locationTemplate = document.getElementById('location-template').innerHTML
+const sidebarTemplate = document.getElementById('sidebar-template').innerHTML
 
 // options
 const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true })
@@ -33,6 +35,14 @@ socket.on('locationMessage', location => {
     })
 
     messages.insertAdjacentHTML('beforeend', html)
+})
+
+socket.on('roomData', ({ room, users }) => {
+    const html = Mustache.render(sidebarTemplate, {
+        room,
+        users
+    })
+    sidebar.innerHTML = html
 })
 
 form.addEventListener('submit', e => {
